@@ -7,78 +7,77 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model carrito {
-  id          Int        @id @default(autoincrement())
-  fk_elemento Int?
-  elementos   elementos? @relation(fields: [fk_elemento], references: [id], onDelete: Cascade, map: "carrito_ibfk_1")
+// model carrito {
+//   id          Int        @id @default(autoincrement())
+//   fk_elemento Int?
+//   elementos   elementos? @relation(fields: [fk_elemento], references: [id], onDelete: Cascade, map: "carrito_ibfk_1")
 
-  @@index([fk_elemento], map: "fkElemento")
-}
+//   @@index([fk_elemento], map: "fkElemento")
+// }
 
-model categorias {
-  id        Int         @id @default(autoincrement())
-  nombre    String      @db.VarChar(32)
-  elementos elementos[]
-}
+// model categorias {
+//   id        Int         @id @default(autoincrement())
+//   nombre    String      @db.VarChar(32)
+//   elementos elementos[]
+// }
 
-model elementos {
-  id           Int              @id @default(autoincrement())
-  fk_categoria Int
-  fk_talla     Int
-  elemento     String           @db.VarChar(50)
-  marca        String           @db.VarChar(50)
-  color        String           @db.VarChar(10)
-  existencias  Int
-  observacion  String           @db.VarChar(500)
-  estado       elementos_estado @default(activo)
-  carrito      carrito[]
-  tallas       tallas           @relation(fields: [fk_talla], references: [id], map: "elementos_ibfk_1")
-  categorias   categorias       @relation(fields: [fk_categoria], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "elementos_ibfk_2")
-  movimiento   movimiento[]
+// model elementos {
+//   id           Int              @id @default(autoincrement())
+//   fk_categoria Int
+//   fk_talla     Int
+//   elemento     String           @db.VarChar(50)
+//   marca        String           @db.VarChar(50)
+//   color        String           @db.VarChar(10)
+//   existencias  Int
+//   observacion  String           @db.VarChar(500)
+//   estado       elementos_estado @default(activo)
+//   carrito      carrito[]
+//   tallas       tallas           @relation(fields: [fk_talla], references: [id], map: "elementos_ibfk_1")
+//   categorias   categorias       @relation(fields: [fk_categoria], references: [id], onDelete: Cascade, onUpdate: Restrict, map: "elementos_ibfk_2")
+//   movimiento   movimiento[]
 
-  @@index([fk_categoria], map: "fkCategoria")
-  @@index([fk_talla], map: "idTipo")
-}
+//   @@index([fk_categoria], map: "fkCategoria")
+//   @@index([fk_talla], map: "idTipo")
+// }
 
-model movimiento {
-  id              Int                        @id @default(autoincrement())
-  tipo_movimiento movimiento_tipo_movimiento
-  tomador         Int
-  elemento        Int
-  ficha           Int
-  cantidad        Int
-  observacion     String                     @db.Text
-  fecha           DateTime                   @default(now()) @db.Date
-  usuarios        usuarios                   @relation(fields: [tomador], references: [id], onDelete: Cascade, map: "movimiento_ibfk_1")
-  elementos       elementos                  @relation(fields: [elemento], references: [id], onDelete: Cascade, map: "movimiento_ibfk_2")
+// model movimiento {
+//   id              Int                        @id @default(autoincrement())
+//   tipo_movimiento movimiento_tipo_movimiento
+//   tomador         Int
+//   elemento        Int
+//   ficha           Int
+//   cantidad        Int
+//   observacion     String                     @db.Text
+//   fecha           DateTime                   @default(now()) @db.Date
+//   usuarios        usuarios                   @relation(fields: [tomador], references: [id], onDelete: Cascade, map: "movimiento_ibfk_1")
+//   elementos       elementos                  @relation(fields: [elemento], references: [id], onDelete: Cascade, map: "movimiento_ibfk_2")
 
-  @@index([elemento], map: "elemento")
-  @@index([elemento], map: "elemento_2")
-  @@index([tomador], map: "tomador")
-}
+//   @@index([elemento], map: "elemento")
+//   @@index([elemento], map: "elemento_2")
+//   @@index([tomador], map: "tomador")
+// }
 
-model tallas {
-  id        Int         @id @default(autoincrement())
-  tallas    String      @db.VarChar(10)
-  elementos elementos[]
-}
+// model tallas {
+//   id        Int         @id @default(autoincrement())
+//   tallas    String      @db.VarChar(10)
+//   elementos elementos[]
+// }
 
 model usuarios {
-  id         Int          @id
-  name       String       @db.VarChar(50)
-  telefono   String       @db.VarChar(15)
-  password   String       @db.VarChar(32)
-  email      String       @db.VarChar(50)
-  rol        String       @db.VarChar(10)
-  movimiento movimiento[]
+  id         Int  @id
+  name       String      
+  telefono   String?     
+  password   String     
+  email      String     
+  rol        String      
 }
 
-enum movimiento_tipo_movimiento {
-  salida
-  entrada
-}
+// enum movimiento_tipo_movimiento {
+//   salida
+//   entrada
+// }
 
-enum elementos_estado {
-  activo
-  inactivo
-}
+// enum elementos_estado {
+//   activo
+//   inactivo
+// }
