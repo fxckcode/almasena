@@ -16,13 +16,47 @@ function createUserByNameAndEmailAndPassword(user) {
             id: user.id,
             email: user.email,
             name: user.name,
-            password: user.password,
-            rol: 'user'
+            password: user.password
+        }
+    })
+}
+
+function getUsers() {
+    return prisma.users.findMany();
+}
+
+function createUser(user) {
+    user.password = bcrypt.hashSync(user.password, 12)
+    return prisma.users.create({
+        data: {
+            ...user
+        }
+    })
+}
+
+function findUserById(id) {
+    return prisma.users.findUnique({
+        where: {
+            id: id
+        }
+    })
+}
+
+function updateUserById(id, user) {
+    return prisma.users.update({
+        where: {
+            id: id
+        }, data: {
+            ...user
         }
     })
 }
 
 export {
     findUserByEmail,
-    createUserByNameAndEmailAndPassword
+    createUserByNameAndEmailAndPassword,
+    getUsers,
+    createUser,
+    findUserById,
+    updateUserById
 }

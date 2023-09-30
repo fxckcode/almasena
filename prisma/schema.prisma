@@ -10,8 +10,38 @@ datasource db {
 model users {
   id       Int     @id
   name     String
-  telefono String?
   password String
   email    String  @unique
-  rol      String
+  rol      Rol     @default(user)
+  phone    String?
+}
+
+model elements {
+  id           Int        @id @default(autoincrement())
+  name         String
+  brand        String?
+  color        String?
+  stock        Int        @default(0)
+  description  String?
+  state        State      @default(active)
+  id_categorie Int
+  categories   categories @relation(fields: [id_categorie], references: [id], onDelete: Cascade)
+
+  @@index([id_categorie], map: "elements_id_categorie_fkey")
+}
+
+model categories {
+  id       Int        @id @default(autoincrement())
+  name     String
+  elements elements[]
+}
+
+enum Rol {
+  user
+  admin
+}
+
+enum State {
+  active
+  inactive
 }
