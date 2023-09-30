@@ -14,7 +14,7 @@ router.post('/register', async (req, res, next) => {
 
         const existingUser = await findUserByEmail(email)
 
-        if (!existingUser) {
+        if (existingUser) {
             res.status(400)
             throw new Error("Email already in use.")
         }
