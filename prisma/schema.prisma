@@ -25,12 +25,21 @@ model elements {
   description  String?
   state        State      @default(active)
   id_categorie Int
+  id_size      Int
   categories   categories @relation(fields: [id_categorie], references: [id], onDelete: Cascade)
+  sizes        sizes      @relation(fields: [id_size], references: [id], onDelete: Cascade)
 
   @@index([id_categorie], map: "elements_id_categorie_fkey")
+  @@index([id_size], map: "elements_id_size_fkey")
 }
 
 model categories {
+  id       Int        @id @default(autoincrement())
+  name     String
+  elements elements[]
+}
+
+model sizes {
   id       Int        @id @default(autoincrement())
   name     String
   elements elements[]

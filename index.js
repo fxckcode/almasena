@@ -3,6 +3,7 @@ import cors from "cors";
 import authRouter from './src/routes/auth.routes.js'
 import usersRouter from './src/routes/users.routes.js'
 import elementsRouter from './src/routes/elements.routes.js'
+import categoriesRouter from './src/routes/categories.routes.js'
 import { isAdmin, isAuthenticated } from "./src/middlewares.js";
 const app = express()
 const port = 8000
@@ -14,6 +15,7 @@ app.use(express.urlencoded({ extended: true }))
 app.use("/auth", authRouter)
 app.use("/", usersRouter)
 app.use("/", isAuthenticated, elementsRouter)
+app.use("/", isAuthenticated, categoriesRouter)
 
 app.listen(port, () => {
     console.log("Listening on port ", port);

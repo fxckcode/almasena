@@ -1,11 +1,11 @@
 import { Router } from 'express'
-import prisma from '../../utils/prisma.js'
+import { createElement, deleteElement, findElementById, getElements, updateElementById } from '../services/elements.service.js'
 const router = Router()
 
 
 router.get("/elements", async (req, res, next) => {
     try {
-        const elements = await prisma.elements.findMany()
+        const elements = await getElements()
         res.json(elements)
     } catch (error) {
         next(error)
@@ -16,11 +16,7 @@ router.post("/elements", async (req, res, next) => {
     try {
         const element = req.body;
 
-        const newElement = await prisma.elements.create({
-            data: {
-                ...element
-            }
-        })
+        const newElement = await createElement(element)
 
         res.json(newElement)
 
@@ -33,11 +29,7 @@ router.get("/elements/:id", async (req, res, next) => {
     try {
         const { id } = req.params;
 
-        const element = await prisma.elements.findUnique({
-            where: {
-                id: parseInt(id)
-            }
-        })
+        const element = await findElementById(id)
 
         res.json(element)
     } catch (error) {
@@ -50,13 +42,7 @@ router.put("/elements/:id", async (req, res, next) => {
     try {
         const { id } = req.params;
         const data = req.body;
-        const updateElement = await prisma.elements.update({
-            where: {
-                id: parseInt(id)
-            }, data: {
-                ...data
-            }
-        })
+        const updateElement = await updateElementById(id, data)
 
         res.json(updateElement)
     } catch (error) {
@@ -67,11 +53,7 @@ router.put("/elements/:id", async (req, res, next) => {
 router.delete("/elements/:id", async (req, res, next) => {
     try {
         const { id } = req.params;
-        await prisma.elements.delete({
-            where: {
-                id: parseInt(id)
-            }
-        })
+        await deleteElement(id)
 
         res.status(201).send({ message: 'Delete element!'})
     } catch (error) {
