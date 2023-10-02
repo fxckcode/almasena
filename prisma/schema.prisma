@@ -8,26 +8,28 @@ datasource db {
 }
 
 model users {
-  id       Int     @id
-  name     String
-  password String
-  email    String  @unique
-  rol      Rol     @default(user)
-  phone    String?
+  id        Int         @id
+  name      String
+  password  String
+  email     String      @unique
+  rol       Rol         @default(user)
+  phone     String?
+  movements movements[]
 }
 
 model elements {
-  id           Int        @id @default(autoincrement())
-  name         String
-  brand        String?
-  color        String?
-  stock        Int        @default(0)
-  description  String?
-  state        State      @default(active)
-  id_categorie Int
-  id_size      Int
-  categories   categories @relation(fields: [id_categorie], references: [id], onDelete: Cascade)
-  sizes        sizes      @relation(fields: [id_size], references: [id], onDelete: Cascade)
+  id                Int                 @id @default(autoincrement())
+  name              String
+  brand             String?
+  color             String?
+  stock             Int                 @default(0)
+  description       String?
+  state             State               @default(active)
+  id_categorie      Int
+  id_size           Int
+  details_movements details_movements[]
+  categories        categories          @relation(fields: [id_categorie], references: [id], onDelete: Cascade)
+  sizes             sizes               @relation(fields: [id_size], references: [id], onDelete: Cascade)
 
   @@index([id_categorie], map: "elements_id_categorie_fkey")
   @@index([id_size], map: "elements_id_size_fkey")
@@ -45,6 +47,31 @@ model sizes {
   elements elements[]
 }
 
+model movements {
+  id                Int                 @id @default(autoincrement())
+  sheet             Int
+  date              DateTime            @default(now())
+  description       String
+  id_user           Int
+  type              Type
+  details_movements details_movements[]
+  users             users               @relation(fields: [id_user], references: [id], onDelete: Cascade)
+
+  @@index([id_user], map: "movements_id_user_fkey")
+}
+
+model details_movements {
+  id          Int       @id @default(autoincrement())
+  id_movement Int
+  id_element  Int
+  cant        Int
+  elements    elements  @relation(fields: [id_element], references: [id], onDelete: Cascade)
+  movements   movements @relation(fields: [id_movement], references: [id], onDelete: Cascade)
+
+  @@index([id_element], map: "details_movements_id_element_fkey")
+  @@index([id_movement], map: "details_movements_id_movement_fkey")
+}
+
 enum Rol {
   user
   admin
@@ -53,4 +80,9 @@ enum Rol {
 enum State {
   active
   inactive
+}
+
+enum Type {
+  entry
+  output
 }

@@ -35,10 +35,18 @@ export function updateElementById(id, data) {
     })
 }
 
-export function deleteElement(id) {
-    return prisma.elements.delete({
+export async function toggleStateElement(id) {
+    const element = await prisma.elements.findFirst({
         where: {
             id: parseInt(id)
+        }
+    })
+
+    return prisma.elements.update({
+        where: {
+            id: parseInt(id)
+        }, data: {
+            state: element.state == 'active' ? 'inactive' : 'active'
         }
     })
 }

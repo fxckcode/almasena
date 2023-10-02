@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { createElement, deleteElement, findElementById, getElements, updateElementById } from '../services/elements.service.js'
+import { createElement, toggleStateElement, findElementById, getElements, updateElementById } from '../services/elements.service.js'
 import { isAdmin, isAuthenticated } from '../middlewares.js'
 const router = Router()
 
@@ -54,9 +54,9 @@ router.put("/elements/:id", isAdmin, async (req, res, next) => {
 router.delete("/elements/:id", isAdmin, async (req, res, next) => {
     try {
         const { id } = req.params;
-        await deleteElement(id)
+        await toggleStateElement(id)
 
-        res.status(201).send({ message: 'Delete element!'})
+        res.status(201).send({ message: 'Toggle Element state'})
     } catch (error) {
         next(error)
     }
