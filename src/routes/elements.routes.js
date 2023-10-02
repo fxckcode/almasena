@@ -1,9 +1,10 @@
 import { Router } from 'express'
 import { createElement, deleteElement, findElementById, getElements, updateElementById } from '../services/elements.service.js'
+import { isAdmin, isAuthenticated } from '../middlewares.js'
 const router = Router()
 
 
-router.get("/elements", async (req, res, next) => {
+router.get("/elements", isAuthenticated, async (req, res, next) => {
     try {
         const elements = await getElements()
         res.json(elements)
@@ -12,7 +13,7 @@ router.get("/elements", async (req, res, next) => {
     }
 })
 
-router.post("/elements", async (req, res, next) => {
+router.post("/elements", isAdmin, async (req, res, next) => {
     try {
         const element = req.body;
 
@@ -25,7 +26,7 @@ router.post("/elements", async (req, res, next) => {
     }
 })
 
-router.get("/elements/:id", async (req, res, next) => {
+router.get("/elements/:id", isAdmin, async (req, res, next) => {
     try {
         const { id } = req.params;
 
@@ -38,7 +39,7 @@ router.get("/elements/:id", async (req, res, next) => {
 })
 
 
-router.put("/elements/:id", async (req, res, next) => {
+router.put("/elements/:id", isAdmin, async (req, res, next) => {
     try {
         const { id } = req.params;
         const data = req.body;
@@ -50,7 +51,7 @@ router.put("/elements/:id", async (req, res, next) => {
     }
 })
 
-router.delete("/elements/:id", async (req, res, next) => {
+router.delete("/elements/:id", isAdmin, async (req, res, next) => {
     try {
         const { id } = req.params;
         await deleteElement(id)

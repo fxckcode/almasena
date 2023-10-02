@@ -5,7 +5,7 @@ import prisma from "../../utils/prisma.js";
 
 const router = Router()
 
-router.get('/users', isAdmin , async (req, res, next) => {
+router.get('/users', isAdmin, async (req, res, next) => {
     try {
         const users = await getUsers()
         res.json(users)
@@ -25,7 +25,7 @@ router.post("/users", isAdmin, async (req, res, next) => {
     }
 })
 
-router.get("/users/:id", isAdmin, async (req, res, next) => {
+router.get("/users/:id", isAuthenticated, async (req, res, next) => {
     try {
         const { id } = req.params;
 
@@ -42,7 +42,7 @@ router.get("/users/:id", isAdmin, async (req, res, next) => {
     }
 })
 
-router.put("/users/:id", isAdmin, async (req, res, next) => {
+router.put("/users/:id", isAuthenticated, async (req, res, next) => {
     try {
         const { id } = req.params;
         const data = req.body;

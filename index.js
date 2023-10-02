@@ -4,7 +4,9 @@ import authRouter from './src/routes/auth.routes.js'
 import usersRouter from './src/routes/users.routes.js'
 import elementsRouter from './src/routes/elements.routes.js'
 import categoriesRouter from './src/routes/categories.routes.js'
+import sizesRouter from './src/routes/sizes.routes.js'
 import { isAdmin, isAuthenticated } from "./src/middlewares.js";
+import endPoints from 'express-list-endpoints'
 const app = express()
 const port = 8000
 
@@ -13,9 +15,15 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 app.use("/auth", authRouter)
-app.use("/", usersRouter)
-app.use("/", isAuthenticated, elementsRouter)
-app.use("/", isAuthenticated, categoriesRouter)
+app.use("/v1", usersRouter)
+app.use("/v1", elementsRouter)
+app.use("/v1", isAdmin, categoriesRouter)
+app.use("/v1", isAdmin, sizesRouter)
+
+app.get("/routes", (req, res, next) => {
+    res.status(200).send(endPoints(app))
+})
+
 
 app.listen(port, () => {
     console.log("Listening on port ", port);
