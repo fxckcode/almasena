@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getMovements, createMovement, getMovementById, updateMovementById } from '../services/movements.service'
+import { getMovements, createMovement, getMovementById, updateMovementById, deleteMovement } from '../services/movements.service.js'
 const router = Router()
 
 router.get("/movements", async (req, res, next) => {
@@ -39,6 +39,16 @@ router.put("/movements/:id", async (req, res, next) => {
         res.json(movement)
     } catch (error) {
         next(error)
+    }
+})
+
+router.delete("/movements/:id", async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        await deleteMovement(id)
+        res.status(201).send({ message: "Delete movement!!!"})
+    } catch (error) {
+        next(error)   
     }
 })
 

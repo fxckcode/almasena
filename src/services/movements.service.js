@@ -37,3 +37,11 @@ export function updateMovementById(id, data) {
         }
     })
 }
+
+export function deleteMovement(id) {
+    return prisma.movements.delete({
+        where: {
+            id: parseInt(id)
+        }
+    })
+}
